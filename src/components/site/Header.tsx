@@ -60,6 +60,7 @@ export function Header() {
           </Sheet>
         </div>
         <Logo />
+
         <nav className="hidden lg:flex items-center gap-7">
           {nav.map((n) => {
             const isActive = pathname === n.href;

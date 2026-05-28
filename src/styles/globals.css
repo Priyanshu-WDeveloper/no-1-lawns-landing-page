@@ -7,7 +7,23 @@
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
-  max-width: 1320px;
+  max-width: 100%;
+
+  @variant lg {
+    max-width: 1100px;
+  }
+  @variant xl {
+    max-width: 1280px;
+  }
+  @variant 2xl {
+    max-width: 1320px;
+  }
+  @variant 3xl {
+    max-width: 1520px;
+  }
+  @variant 4xl {
+    max-width: 1820px;
+  }
 }
 
 @theme inline {
@@ -45,18 +61,39 @@
   --color-sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --color-sidebar-border: oklch(0.929 0.013 255.508);
   --color-sidebar-ring: oklch(0.704 0.04 256.788);
+  --breakpoint-3xl: 1620px;
+  --breakpoint-4xl: 1720px;
   --radius: 0.625rem;
-  --font-family-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-family-sans:
+    var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
   * {
     border-color: var(--color-border);
     box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.58 0.17 145 / 0.3) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: oklch(0.58 0.17 145 / 0.3);
+    border-radius: 999px;
+    transition: background 0.2s;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.58 0.17 145 / 0.6);
   }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: 'Nunito', sans-serif;
     box-sizing: border-box;
   }
 }

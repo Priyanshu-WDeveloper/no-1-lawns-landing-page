@@ -17,7 +17,7 @@ export function Footer() {
   return (
     <footer className="bg-[#0e2a18] text-white/90">
       <div className="container mx-auto px-4 py-10 flex flex-col items-center md:flex-row md:items-center md:justify-between gap-6">
-        <Logo light />
+        <Logo footer />
         <div className="grid grid-cols-2 gap-x-6 gap-y-3 md:flex md:items-center md:gap-6">
           {items.map((it) => (
             <div

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PageHero } from '@/components/site/PageHero';
@@ -54,9 +55,9 @@ export default function ServicesPage() {
                         <span className="text-sm font-semibold text-primary-dark whitespace-nowrap">
                           {s.price}
                         </span>
-                        <Button className="bg-primary hover:bg-primary/90 text-white text-sm h-9">
-                          Book Now
-                        </Button>
+                      <Button asChild className="bg-primary hover:bg-primary/90 text-white text-sm h-9">
+                        <Link href="/quote">Book Now</Link>
+                      </Button>
                       </div>
                     </div>
                   </div>

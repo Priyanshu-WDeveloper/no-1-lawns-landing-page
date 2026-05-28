@@ -1,19 +1,26 @@
-import Link from "next/link";
-import { Leaf } from "lucide-react";
+import Link from 'next/link';
+import Image from 'next/image';
+import logo from '@public/images/app_icon.png';
 
-export function Logo({ light = false }: { light?: boolean }) {
+export function Logo({
+  light = false,
+  footer = false,
+}: {
+  light?: boolean;
+  footer?: boolean;
+}) {
   return (
-    <Link href="/" className="flex items-center gap-2">
-      <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary">
-        <Leaf className="h-6 w-6" />
-      </div>
-      <div className="leading-tight">
-        <div className={`font-extrabold tracking-wide text-lg ${light ? "text-white" : "text-primary-dark"}`}>
-          NO.1 LAWNS
-        </div>
-        <div className={`text-[10px] tracking-[0.18em] ${light ? "text-white/80" : "text-muted-foreground"}`}>
-          GARDEN MAINTENANCE
-        </div>
+    <Link href="/">
+      <div
+        className={`relative flex ${footer ? 'h-25 bg-neutral-50 rounded-xl' : 'h-15'}  w-50 `}
+      >
+        <Image
+          src={logo}
+          fill
+          className="object-cover "
+          alt="No.1 Lawns"
+          priority
+        />
       </div>
     </Link>
   );
