@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
+        url: '/images/app_icon.png',
+        // media: '(prefers-color-scheme: light)',
+      },
+      {
         url: '/images/favicon-light.svg',
         media: '(prefers-color-scheme: light)',
       },
@@ -37,7 +41,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${_nunito.className} min-h-screen flex flex-col bg-[#fafaf7] antialiased`}>
+      <body
+        className={`${_nunito.className} min-h-screen flex flex-col bg-[#fafaf7] antialiased`}
+      >
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
