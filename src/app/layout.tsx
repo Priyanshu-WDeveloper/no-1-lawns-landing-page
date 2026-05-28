@@ -17,20 +17,20 @@ export const metadata: Metadata = {
         url: '/images/app_icon.png',
         // media: '(prefers-color-scheme: light)',
       },
-      {
-        url: '/images/favicon-light.svg',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/images/favicon-dark.svg',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/images/favicon.svg',
-        type: 'image/svg+xml',
-      },
+      // {
+      //   url: '/images/favicon-light.svg',
+      //   media: '(prefers-color-scheme: light)',
+      // },
+      // {
+      //   url: '/images/favicon-dark.svg',
+      //   media: '(prefers-color-scheme: dark)',
+      // },
+      // {
+      //   url: '/images/favicon.svg',
+      //   type: 'image/svg+xml',
+      // },
     ],
-    apple: '/images/apple-icon.png',
+    // apple: '/images/apple-icon.png',
   },
 };
 
