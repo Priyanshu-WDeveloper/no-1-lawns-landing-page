@@ -55,13 +55,14 @@ export function BeforeAfterSlider({
       aria-label="Before and after comparison"
       aria-valuenow={Math.round(position)}
     >
-      <img src={after} className="absolute inset-0 w-full h-full object-cover pointer-events-none" alt={alt} />
+      <img src={after} loading="lazy" className="absolute inset-0 w-full h-full object-cover pointer-events-none" alt={alt} />
       <div
         className="absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
         <img
           src={before}
+          loading="lazy"
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           alt={`${alt} (before)`}
         />

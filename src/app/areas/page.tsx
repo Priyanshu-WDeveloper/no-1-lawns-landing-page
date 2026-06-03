@@ -66,7 +66,6 @@ export default async function AreasPage() {
           <Image
             src={serviceAreaImg}
             fill
-            priority
             className="object-contain"
             alt="Beautiful maintained garden"
           />

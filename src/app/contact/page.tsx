@@ -44,7 +44,7 @@ export default async function ContactPage() {
   try {
     const config = await getWebsiteConfig();
     contact = config.websiteContactDetails;
-    banner = config.websiteBannerList?.[3];
+    banner = config.websiteBannerList?.[7];
   } catch {
     contact = null;
     banner = null;
@@ -68,7 +68,9 @@ export default async function ContactPage() {
     <>
       <PageHero
         title={banner?.title || 'Contact Us'}
-        subtitle={banner?.description || "We'd love to hear from you!"}
+        subtitle={
+          banner?.description || "We'd love to hear from you!"
+        }
         image="/images/garden-plants.jpg"
       />
       <section className="container mx-auto px-4 py-14 grid lg:grid-cols-2 gap-12">
@@ -156,7 +158,6 @@ export default async function ContactPage() {
             <Image
               src={contactMap}
               fill
-              priority
               alt="Map"
               className="object-cover"
             />

@@ -2,11 +2,11 @@ import Image from 'next/image';
 import heroImg from '@public/images/hero.png';
 import { Phone, Leaf, ShieldCheck, User, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ServiceCard } from '@/components/site/ServiceCard';
+import { ServiceCarousel } from '@/components/site/ServiceCarousel';
 import { SectionHeading } from '@/components/site/SectionHeading';
 import { CTABanner } from '@/components/site/CTABanner';
 import { AnimateOnScroll } from '@/components/site/AnimateOnScroll';
-import { getServices, getWebsiteConfig } from '@/lib/server-data';
+import { getServices, getWebsiteConfig, getReviews } from '@/lib/server-data';
 
 const featureIcons = [Leaf, ShieldCheck, User, MapPin];
 
@@ -15,13 +15,16 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   let serviceList: any[] = [];
   let config;
+  let reviews: any[] = [];
   try {
-    const [svc, cfg] = await Promise.all([
+    const [svc, cfg, rev] = await Promise.all([
       getServices(),
       getWebsiteConfig(),
+      getReviews(),
     ]);
     serviceList = svc;
     config = cfg;
+    reviews = rev;
   } catch {
     config = null;
   }
@@ -115,13 +118,15 @@ export default async function Home() {
           title="Complete Garden Maintenance"
           subtitle="One stop solution for all your garden care needs."
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {serviceList.slice(0, 8).map((s, i) => (
-            <AnimateOnScroll key={s._id} delay={i * 100}>
-              <ServiceCard service={s} />
-            </AnimateOnScroll>
-          ))}
-        </div>
+        <ServiceCarousel
+  services={serviceList.slice(0, 8)}
+  phone={config?.websiteContactDetails?.phone}
+  areas={{
+    city: config?.websiteContactDetails?.city,
+    country: config?.websiteContactDetails?.country,
+  }}
+  testimonial={reviews[0]}
+/>
       </section>
 
       <CTABanner phone={config?.websiteContactDetails?.phone} />

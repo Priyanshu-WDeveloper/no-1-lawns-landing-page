@@ -91,6 +91,7 @@ export default async function AboutPage() {
             src={aboutImage}
             width={800}
             height={600}
+            loading="lazy"
             alt="About us"
             className="rounded-lg shadow-md w-full object-cover max-h-[600px] outline outline-1 -outline-offset-1 outline-black/10"
           />

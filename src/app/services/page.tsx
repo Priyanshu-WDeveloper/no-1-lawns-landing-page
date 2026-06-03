@@ -41,6 +41,7 @@ export default async function ServicesPage() {
                 <img
                   src={s.image || '/images/hero-lawn.jpg'}
                   alt={s.title}
+                  loading="lazy"
                   className="h-48 w-full rounded-xl object-cover sm:h-20 sm:w-28 sm:shrink-0"
                 />
 
