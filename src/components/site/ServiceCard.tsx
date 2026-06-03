@@ -1,12 +1,11 @@
-import Image, { type StaticImageData } from 'next/image';
 import type { LucideIcon } from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
 
 export interface Service {
   title: string;
   description: string;
-  image: string | StaticImageData;
-  icon: LucideIcon;
+  image?: string;
+  icon?: LucideIcon;
 }
 
 export function ServiceCard({ service }: { service: Service }) {
@@ -14,18 +13,18 @@ export function ServiceCard({ service }: { service: Service }) {
   return (
     <div className="bg-white rounded-lg border shadow-sm overflow-hidden flex flex-col group hover:shadow-lg transition">
       <div className="relative">
-        <Image
-          src={service.image}
-          width={400}
-          height={300}
+        <img
+          src={service.image || '/images/hero-lawn.jpg'}
           className="w-full h-44 object-cover"
           alt={service.title}
         />
-        <div className="absolute -bottom-6 left-5 h-12 w-12 rounded-full bg-primary flex items-center justify-center text-white shadow-md">
-          <Icon className="h-6 w-6" />
-        </div>
+        {Icon && (
+          <div className="absolute -bottom-6 left-5 h-12 w-12 rounded-full bg-primary flex items-center justify-center text-white shadow-md">
+            <Icon className="h-6 w-6" />
+          </div>
+        )}
       </div>
-      <div className="p-5 pt-8 flex flex-col flex-1">
+      <div className={Icon ? 'p-5 pt-8 flex flex-col flex-1' : 'p-5 pt-3 flex flex-col flex-1'}>
         <h3 className="font-bold text-primary-dark text-lg">
           {service.title}
         </h3>

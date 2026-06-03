@@ -4,6 +4,8 @@ import { Analytics } from '@vercel/analytics/next';
 import '@/styles/globals.css';
 import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
+import { ReduxProvider } from '@/lib/redux/provider';
+import { getWebsiteConfig } from '@/lib/server-data';
 
 const _nunito = Nunito({ subsets: ['latin'] });
 
@@ -15,38 +17,35 @@ export const metadata: Metadata = {
     icon: [
       {
         url: '/images/app_icon.png',
-        // media: '(prefers-color-scheme: light)',
       },
-      // {
-      //   url: '/images/favicon-light.svg',
-      //   media: '(prefers-color-scheme: light)',
-      // },
-      // {
-      //   url: '/images/favicon-dark.svg',
-      //   media: '(prefers-color-scheme: dark)',
-      // },
-      // {
-      //   url: '/images/favicon.svg',
-      //   type: 'image/svg+xml',
-      // },
     ],
-    // apple: '/images/apple-icon.png',
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let contactDetails = undefined;
+  let websiteLogo = undefined;
+
+  try {
+    const config = await getWebsiteConfig();
+    contactDetails = config.websiteContactDetails;
+    websiteLogo = config.websiteLogo;
+  } catch {}
+
   return (
     <html lang="en">
       <body
         className={`${_nunito.className} min-h-screen flex flex-col bg-[#fafaf7] antialiased`}
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Header contactDetails={contactDetails} websiteLogo={websiteLogo} />
+        <main className="flex-1">
+          <ReduxProvider>{children}</ReduxProvider>
+        </main>
+        <Footer contactDetails={contactDetails} />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

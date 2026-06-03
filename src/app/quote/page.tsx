@@ -20,9 +20,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { services } from '@/lib/services';
 import workerImage from '@public/images/quote.png';
 import Image from 'next/image';
+import type { NewLawnService } from '@/types/new-lawns.types';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.no1lawns.com/api/v1/websites';
 
 const benefits = [
   'Free and obligation free',
@@ -33,6 +35,15 @@ const benefits = [
 
 export default function QuotePage() {
   const [date, setDate] = React.useState<Date>();
+  const [services, setServices] = React.useState<NewLawnService[]>([]);
+
+  React.useEffect(() => {
+    fetch(`${API_URL}/services`)
+      .then((res) => res.json() as Promise<{ services: NewLawnService[] }>)
+      .then((data) => setServices(data.services))
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="container mx-auto px-4 py-14 grid lg:grid-cols-3 gap-8">
       <div className="lg:col-span-2 bg-white border rounded-xl p-8 shadow-sm">
@@ -64,7 +75,7 @@ export default function QuotePage() {
               </SelectTrigger>
               <SelectContent>
                 {services.map((s) => (
-                  <SelectItem key={s.slug} value={s.slug}>
+                  <SelectItem key={s._id} value={s._id}>
                     {s.title}
                   </SelectItem>
                 ))}

@@ -4,40 +4,29 @@ import { CTABanner } from '@/components/site/CTABanner';
 import Image from 'next/image';
 
 import serviceAreaImg from '@public/images/service-area.png';
+import { getWebsiteConfig } from '@/lib/server-data';
 
 export const metadata: Metadata = {
   title: 'Service Areas — No.1 Lawns',
 };
 
-const areas = [
-  {
-    city: 'Auckland',
-    title: 'Garden Services in Auckland',
-    desc: 'Professional lawn mowing, landscaping and garden maintenance across the greater Auckland region.',
-  },
-  {
-    city: 'Hamilton',
-    title: 'Garden Services in Hamilton',
-    desc: 'Reliable garden care including hedge trimming, weed control and clean-ups in Hamilton and surrounds.',
-  },
-  {
-    city: 'Tauranga',
-    title: 'Garden Services in Tauranga',
-    desc: 'Expert landscaping and garden maintenance services for Tauranga homes and businesses.',
-  },
-  {
-    city: 'Wellington',
-    title: 'Garden Services in Wellington',
-    desc: 'Full-service garden maintenance from lawn care to tree pruning across the Wellington region.',
-  },
-  {
-    city: 'Christchurch',
-    title: 'Garden Services in Christchurch',
-    desc: 'Premium lawn and garden services for Christchurch properties, large and small.',
-  },
-];
+export const dynamic = 'force-dynamic';
 
-export default function AreasPage() {
+export default async function AreasPage() {
+  let areas: { city: string; title: string; desc: string }[] = [];
+  let config;
+  try {
+    config = await getWebsiteConfig();
+    const provinces = config?.websiteContactDetails?.provinces;
+    areas = provinces
+      ? provinces.split(',').map((s: string) => s.trim()).filter(Boolean).map((city: string) => ({
+          city,
+          title: 'Garden Services in ' + city,
+          desc: 'Professional garden maintenance services for ' + city + ' and surrounding areas.',
+        }))
+      : [];
+  } catch {}
+
   return (
     <>
       <section className="container mx-auto px-4 py-14 grid lg:grid-cols-2 gap-12 items-start">
@@ -52,7 +41,7 @@ export default function AreasPage() {
             </p>
           </div>
           <div className="space-y-4">
-            {areas.map((a) => (
+            {areas.map((a: { city: string; title: string; desc: string }) => (
               <a
                 key={a.city}
                 href="#"
@@ -81,7 +70,7 @@ export default function AreasPage() {
           />
         </div>
       </section>
-      <CTABanner />
+      <CTABanner phone={config?.websiteContactDetails?.phone} />
     </>
   );
 }

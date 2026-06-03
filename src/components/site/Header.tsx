@@ -11,6 +11,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import type { WebsiteContactDetails } from '@/types/new-lawns.types';
 
 const nav = [
   { href: '/', label: 'Home' },
@@ -22,9 +23,17 @@ const nav = [
   { href: '/contact', label: 'Contact' },
 ];
 
-export function Header() {
+export function Header({
+  contactDetails,
+  websiteLogo,
+}: {
+  contactDetails?: WebsiteContactDetails;
+  websiteLogo?: string;
+}) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const phone = contactDetails?.phone || '022 323 4429';
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b supports-[backdrop-filter]:bg-white/80">
@@ -86,10 +95,10 @@ export function Header() {
             );
           })}
         </nav>
-        <a href="tel:0223234429">
+        <a href={`tel:${phone.replace(/\s/g, '')}`}>
           <Button className="bg-primary hover:bg-primary/90 text-white gap-2">
             <Phone className="h-4 w-4" />
-            <span className="hidden sm:block">022 323 4429</span>
+            <span className="hidden sm:block">{phone}</span>
           </Button>
         </a>
       </div>

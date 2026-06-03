@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function BeforeAfterSlider({
@@ -56,15 +55,14 @@ export function BeforeAfterSlider({
       aria-label="Before and after comparison"
       aria-valuenow={Math.round(position)}
     >
-      <Image src={after} fill className="object-cover pointer-events-none" alt={alt} />
+      <img src={after} className="absolute inset-0 w-full h-full object-cover pointer-events-none" alt={alt} />
       <div
         className="absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
       >
-        <Image
+        <img
           src={before}
-          fill
-          className="object-cover pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           alt={`${alt} (before)`}
         />
       </div>

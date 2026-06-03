@@ -13,6 +13,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 import contactMap from '@public/images/contact-map.png';
+import { PageHero } from '@/components/site/PageHero';
+import { getWebsiteConfig } from '@/lib/server-data';
 
 export const metadata: Metadata = {
   title: 'Contact — No.1 Lawns',
@@ -34,42 +36,45 @@ function InstagramIcon() {
   );
 }
 
-export default function ContactPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function ContactPage() {
+  let contact;
+  let banner;
+  try {
+    const config = await getWebsiteConfig();
+    contact = config.websiteContactDetails;
+    banner = config.websiteBannerList?.[3];
+  } catch {
+    contact = null;
+    banner = null;
+  }
+
+  const phone = contact?.phone || '';
+  const email = contact?.email || '';
+  const businessHours = contact?.businessHours || '';
+  const areas = [contact?.city, contact?.country]
+    .filter(Boolean)
+    .join(', ');
+
+  const contactCards = [
+    { icon: Phone, title: 'Call Us', value: phone },
+    { icon: Mail, title: 'Email Us', value: email },
+    { icon: Clock, title: 'Business Hours', value: businessHours },
+    { icon: MapPin, title: 'Service Areas', value: areas },
+  ];
+
   return (
     <>
+      <PageHero
+        title={banner?.title || 'Contact Us'}
+        subtitle={banner?.description || "We'd love to hear from you!"}
+        image="/images/garden-plants.jpg"
+      />
       <section className="container mx-auto px-4 py-14 grid lg:grid-cols-2 gap-12">
         <div>
-          <h1 className="text-3xl font-bold text-primary-dark">
-            Contact Us
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            We'd love to hear from you!
-          </p>
-
           <div className="mt-8 space-y-5">
-            {[
-              {
-                icon: Phone,
-                title: 'Call Us',
-                value: '022 323 4429',
-              },
-              {
-                icon: Mail,
-                title: 'Email Us',
-                value: 'info@no1lawns.co.nz',
-              },
-              {
-                icon: Clock,
-                title: 'Business Hours',
-                value: 'Mon – Sat: 7:00 AM – 6:00 PM\nSunday: Closed',
-              },
-              {
-                icon: MapPin,
-                title: 'Service Areas',
-                value:
-                  'Auckland, Hamilton, Tauranga, Wellington, Christchurch and surrounding areas.',
-              },
-            ].map((it) => (
+            {contactCards.map((it) => (
               <div key={it.title} className="flex gap-4">
                 <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   <it.icon className="h-5 w-5" />
@@ -119,7 +124,6 @@ export default function ContactPage() {
 
       <section className="container mx-auto px-4 pb-14">
         <div className="relative overflow-hidden rounded-[32px] border bg-white shadow-xl">
-          {/* FOLLOW US */}
           <div className="absolute left-10 top-10 z-20">
             <h3 className="text-sm font-semibold text-primary-dark">
               Follow Us
@@ -148,7 +152,6 @@ export default function ContactPage() {
               </a>
             </div>
           </div>
-          {/* MAP */}
           <div className="relative h-[420px] w-full">
             <Image
               src={contactMap}
@@ -158,22 +161,15 @@ export default function ContactPage() {
               className="object-cover"
             />
 
-            {/* SOFT OVERLAY */}
             <div className="absolute inset-0 bg-white/10 backdrop-blur-[1px]" />
 
-            {/* LEFT WHITE FADE */}
             <div className="absolute inset-y-0 left-0 w-[45%] bg-gradient-to-r from-white via-white/95 to-transparent hidden md:block" />
 
-            {/* CONTENT */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="absolute left-1/2 top-1/2 w-full max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-7 shadow-2xl border">
                 <div className="flex flex-col items-center text-center">
-                  {' '}
                   <div className="flex items-center gap-2">
                     <MapPin className="h-15 w-15 text-white fill-red-500" />
-                    {/* <span className="text-sm font-medium text-muted-foreground">
-                      Main Location
-                    </span> */}
                   </div>
                   <div>
                     <div className="flex items-start gap-4">
@@ -193,10 +189,6 @@ export default function ContactPage() {
                       Proudly serving New Zealand.
                     </p>
                   </div>
-                  {/* 
-                  <button className="mt-5 inline-flex items-center rounded-xl bg-primary px-5 py-3 text-sm font-medium text-white shadow transition hover:bg-primary-dark">
-                    Get Directions
-                  </button> */}
                 </div>
               </div>
             </div>
