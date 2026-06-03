@@ -15,7 +15,7 @@ export function ServiceCard({ service }: { service: Service }) {
       <div className="relative">
         <img
           src={service.image || '/images/hero-lawn.jpg'}
-          className="w-full h-44 object-cover"
+          className="w-full h-44 object-cover outline outline-1 -outline-offset-1 outline-black/10"
           alt={service.title}
         />
         {Icon && (

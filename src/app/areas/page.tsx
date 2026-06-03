@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { ArrowRight } from 'lucide-react';
 import { CTABanner } from '@/components/site/CTABanner';
+import { AnimateOnScroll } from '@/components/site/AnimateOnScroll';
 import Image from 'next/image';
 
 import serviceAreaImg from '@public/images/service-area.png';
@@ -41,11 +42,11 @@ export default async function AreasPage() {
             </p>
           </div>
           <div className="space-y-4">
-            {areas.map((a: { city: string; title: string; desc: string }) => (
+            {areas.map((a: { city: string; title: string; desc: string }, i) => (
+              <AnimateOnScroll key={a.city} delay={i * 100}>
               <a
-                key={a.city}
                 href="#"
-                className="flex items-center justify-between bg-white border rounded-xl p-6 hover:shadow-lg transition-all duration-200 group"
+                className="flex items-center justify-between bg-white border rounded-xl p-6 hover:shadow-lg transition-[box-shadow] duration-200 group"
               >
                 <div>
                   <div className="font-bold text-primary-dark text-lg">
@@ -57,6 +58,7 @@ export default async function AreasPage() {
                 </div>
                 <ArrowRight className="h-5 w-5 text-primary shrink-0 ml-4 transition-transform duration-200 group-hover:translate-x-1" />
               </a>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>

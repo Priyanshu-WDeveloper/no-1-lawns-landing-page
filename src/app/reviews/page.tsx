@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Star } from 'lucide-react';
 import { PageHero } from '@/components/site/PageHero';
 import { CTABanner } from '@/components/site/CTABanner';
+import { AnimateOnScroll } from '@/components/site/AnimateOnScroll';
 import { getReviews, getGallery, getWebsiteConfig } from '@/lib/server-data';
 
 export const metadata: Metadata = {
@@ -45,14 +46,15 @@ export default async function ReviewsPage() {
       <section className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {statCards.map((s, i) => (
-            <div key={i} className="bg-white border rounded-xl p-8 text-center shadow-sm">
-              <div className="text-sm font-semibold text-muted-foreground tracking-wide">
-                {s.label}
-              </div>
-              <div className="flex items-center gap-3 justify-center mt-3">
-                <div className="text-5xl font-bold text-primary-dark">
-                  {s.value}
+            <AnimateOnScroll key={i} delay={i * 100}>
+              <div className="bg-white border rounded-xl p-8 text-center shadow-sm">
+                <div className="text-sm font-semibold text-muted-foreground tracking-wide">
+                  {s.label}
                 </div>
+                <div className="flex items-center gap-3 justify-center mt-3">
+                  <div className="text-5xl font-bold text-primary-dark tabular-nums">
+                    {s.value}
+                  </div>
                 <div className="flex justify-center gap-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
@@ -63,14 +65,15 @@ export default async function ReviewsPage() {
                 </div>
               </div>
             </div>
+            </AnimateOnScroll>
           ))}
         </div>
 
         <div className="grid md:grid-cols-4 gap-6">
-          {reviews.map((r) => (
+          {reviews.map((r, i) => (
+            <AnimateOnScroll key={r._id} delay={i * 100}>
             <div
-              key={r._id}
-              className="bg-white border rounded-2xl p-6 hover:shadow-md transition-all duration-300"
+              className="bg-white border rounded-2xl p-6 hover:shadow-md transition-[box-shadow] duration-300"
             >
               <div className="flex items-start gap-3">
                 <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center font-bold text-white text-sm ring-2 ring-white shadow-md shrink-0">
@@ -107,6 +110,7 @@ export default async function ReviewsPage() {
                 ))}
               </div>
             </div>
+          </AnimateOnScroll>
           ))}
         </div>
 

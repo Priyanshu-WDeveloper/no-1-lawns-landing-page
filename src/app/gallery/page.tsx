@@ -48,9 +48,24 @@ export default function GalleryPage() {
         </div>
 
         {isLoading && (
-          <div className="text-center text-muted-foreground py-12">
-            Loading images...
-          </div>
+          <>
+            <div className="flex flex-wrap gap-2 justify-center mb-10">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-9 w-20 rounded-full animate-shimmer bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]"
+                />
+              ))}
+            </div>
+            <div className="columns-2 md:columns-3 lg:columns-4 gap-4 [&>div]:break-inside-avoid">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`relative ${heights[i % heights.length]} rounded-xl overflow-hidden mb-4 animate-shimmer bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]`}
+                />
+              ))}
+            </div>
+          </>
         )}
 
         {!isLoading && beforeAfterItems.length > 0 && (

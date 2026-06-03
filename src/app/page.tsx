@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ServiceCard } from '@/components/site/ServiceCard';
 import { SectionHeading } from '@/components/site/SectionHeading';
 import { CTABanner } from '@/components/site/CTABanner';
+import { AnimateOnScroll } from '@/components/site/AnimateOnScroll';
 import { getServices, getWebsiteConfig } from '@/lib/server-data';
 
 const featureIcons = [Leaf, ShieldCheck, User, MapPin];
@@ -45,57 +46,64 @@ export default async function Home() {
             src={heroImg}
             fill
             priority
-            className="object-cover"
+            className="object-cover outline outline-1 -outline-offset-1 outline-black/10"
             alt="Beautiful maintained garden"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a1f10]/85 via-[#0a1f10]/40 to-transparent" />
           <div className="relative container mx-auto px-4 h-full flex items-center">
             <div className="text-white max-w-2xl">
-              <h1
-                className="text-4xl md:text-6xl font-bold leading-tight"
-                dangerouslySetInnerHTML={{ __html: heroTitle }}
-              />
-              <div className="mt-4 h-1 w-16 bg-primary" />
-              <p className="mt-5 text-white/85 text-lg">
-                {heroDesc}
-              </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <a href="/quote">
-                  <Button
-                    size="lg"
-                    className="bg-primary hover:bg-primary/90 text-white gap-2"
-                  >
-                    Get a Free Quote
-                  </Button>
-                </a>
-                {config?.websiteContactDetails?.phone && (
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="bg-white/10 text-white border-white/30 hover:bg-white/20"
-                  >
-                    <Phone className="h-4 w-4" /> {config.websiteContactDetails.phone}
-                  </Button>
-                )}
-              </div>
+              <AnimateOnScroll noscroll>
+                <h1
+                  className="text-4xl md:text-6xl font-bold leading-tight text-balance"
+                  dangerouslySetInnerHTML={{ __html: heroTitle }}
+                />
+              </AnimateOnScroll>
+              <AnimateOnScroll noscroll delay={200}>
+                <div className="mt-4 h-1 w-16 bg-primary" />
+              </AnimateOnScroll>
+              <AnimateOnScroll noscroll delay={400}>
+                <p className="mt-5 text-white/85 text-lg">
+                  {heroDesc}
+                </p>
+              </AnimateOnScroll>
+              <AnimateOnScroll noscroll delay={600}>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <a href="/quote">
+                    <Button
+                      size="lg"
+                      className="bg-primary hover:bg-primary/90 text-white gap-2"
+                    >
+                      Get a Free Quote
+                    </Button>
+                  </a>
+                  {config?.websiteContactDetails?.phone && (
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="bg-white/10 text-white border-white/30 hover:bg-white/20"
+                    >
+                      <Phone className="h-4 w-4" /> {config.websiteContactDetails.phone}
+                    </Button>
+                  )}
+                </div>
+              </AnimateOnScroll>
             </div>
           </div>
         </section>
         <div className="container mx-auto px-4 -mt-10 relative z-10">
           <div className="bg-primary text-white rounded-md grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/20">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="flex items-center gap-3 p-5"
-              >
-                <f.icon className="h-7 w-7 shrink-0" />
-                <div>
-                  <div className="font-semibold text-sm">
-                    {f.title}
+            {features.map((f, i) => (
+              <AnimateOnScroll key={f.title} delay={i * 100}>
+                <div className="flex items-center gap-3 p-5">
+                  <f.icon className="h-7 w-7 shrink-0" />
+                  <div>
+                    <div className="font-semibold text-sm">
+                      {f.title}
+                    </div>
+                    <div className="text-xs text-white/80">{f.sub}</div>
                   </div>
-                  <div className="text-xs text-white/80">{f.sub}</div>
                 </div>
-              </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
@@ -108,8 +116,10 @@ export default async function Home() {
           subtitle="One stop solution for all your garden care needs."
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {serviceList.map((s) => (
-            <ServiceCard key={s._id} service={s} />
+          {serviceList.slice(0, 8).map((s, i) => (
+            <AnimateOnScroll key={s._id} delay={i * 100}>
+              <ServiceCard service={s} />
+            </AnimateOnScroll>
           ))}
         </div>
       </section>

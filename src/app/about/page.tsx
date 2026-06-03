@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Users, Wrench, Leaf, Heart, MapPin } from 'lucide-react';
 import { PageHero } from '@/components/site/PageHero';
 import { CTABanner } from '@/components/site/CTABanner';
+import { AnimateOnScroll } from '@/components/site/AnimateOnScroll';
 import { getWebsiteConfig } from '@/lib/server-data';
 
 export const metadata: Metadata = {
@@ -66,8 +67,9 @@ export default async function AboutPage() {
           </div>
 
           <div className="mt-8 space-y-5">
-            {displayValues.map((v) => (
-              <div key={v.title} className="flex gap-4">
+            {displayValues.map((v, i) => (
+              <AnimateOnScroll key={v.title} delay={i * 100}>
+              <div className="flex gap-4">
                 <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   <v.icon className="h-5 w-5" />
                 </div>
@@ -80,6 +82,7 @@ export default async function AboutPage() {
                   </div>
                 </div>
               </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
@@ -89,7 +92,7 @@ export default async function AboutPage() {
             width={800}
             height={600}
             alt="About us"
-            className="rounded-lg shadow-md w-full object-cover max-h-[600px]"
+            className="rounded-lg shadow-md w-full object-cover max-h-[600px] outline outline-1 -outline-offset-1 outline-black/10"
           />
         ) : (
           <Image
@@ -97,22 +100,24 @@ export default async function AboutPage() {
             width={800}
             height={600}
             alt="Garden"
-            className="rounded-lg shadow-md w-full object-cover max-h-[600px]"
+            className="rounded-lg shadow-md w-full object-cover max-h-[600px] outline outline-1 -outline-offset-1 outline-black/10"
           />
         )}
       </section>
 
       <section className="bg-primary/5 py-10">
         <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {displayStats.map((s) => (
-            <div key={s.l} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary">
+          {displayStats.map((s, i) => (
+            <AnimateOnScroll key={s.l} delay={i * 100}>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-primary tabular-nums">
                 {s.v}
               </div>
               <div className="text-sm text-muted-foreground mt-1">
                 {s.l}
               </div>
             </div>
+            </AnimateOnScroll>
           ))}
         </div>
       </section>

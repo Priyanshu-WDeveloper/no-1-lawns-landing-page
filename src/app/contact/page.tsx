@@ -132,21 +132,21 @@ export default async function ContactPage() {
             <div className="mt-4 flex items-center gap-4">
               <a
                 href="#"
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-md transition-all duration-300 hover:brightness-90"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-md transition-[brightness] duration-300 hover:brightness-90"
               >
                 <FacebookIcon />
               </a>
 
               <a
                 href="#"
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 text-white shadow-md transition-all duration-300 hover:brightness-90"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 text-white shadow-md transition-[brightness] duration-300 hover:brightness-90"
               >
                 <InstagramIcon />
               </a>
 
               <a
                 href="#"
-                className="flex h-12 w-12 items-center justify-center rounded-full bg-[#DB4437] text-white shadow-md transition-all duration-300 hover:brightness-90"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-[#DB4437] text-white shadow-md transition-[brightness] duration-300 hover:brightness-90"
               >
                 <Globe className="h-5 w-5" />
               </a>

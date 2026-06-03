@@ -2,6 +2,11 @@
 @source "../src";
 @import 'tw-animate-css';
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @utility container {
@@ -66,6 +71,16 @@
   --radius: 0.625rem;
   --font-family-sans:
     var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --animate-shimmer: shimmer 1.5s ease-in-out infinite;
+}
+
+@utility animate-fade-in {
+  opacity: 0;
+  transform: translateY(12px);
+  filter: blur(4px);
+  transition-property: opacity, transform, filter;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  transition-duration: 400ms;
 }
 
 @layer base {
