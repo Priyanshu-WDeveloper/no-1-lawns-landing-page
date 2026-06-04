@@ -30,7 +30,7 @@ export function ServiceCard({
   phone?: string;
   areas?: { city?: string; country?: string };
   testimonial?: NewLawnReview;
-  variant?: 'full' | 'image-only';
+  variant?: 'full' | 'image-only' | 'simple';
   rating?: number;
   bullets?: string[];
   reviewCount?: number;
@@ -52,7 +52,7 @@ export function ServiceCard({
         className="w-full h-full object-cover outline outline-1 -outline-offset-1 outline-black/10 group-hover:scale-105 transition-transform duration-300"
         alt={service.title}
       />
-      {badge && (
+      {badge && variant !== 'simple' && (
         <div className="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
           {badge}
         </div>
@@ -87,6 +87,30 @@ export function ServiceCard({
             {imageSection.props.children}
           </div>
         </ServiceDetailModal>
+      </div>
+    );
+  }
+
+  if (variant === 'simple') {
+    return (
+      <div className="h-full bg-white rounded-lg overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-lg shadow-[0px_0px_0px_1px_rgba(0,0,0,0.06),0px_1px_2px_-1px_rgba(0,0,0,0.06),0px_2px_4px_0px_rgba(0,0,0,0.04)] transition-all duration-200">
+        {imageSection}
+        <div className="p-5 flex flex-col flex-1">
+          <h3 className="font-bold text-primary-dark text-lg">{service.title}</h3>
+          <p className="mt-2 text-sm text-muted-foreground flex-1 line-clamp-3">{service.description}</p>
+          <div className="mt-4">
+            <ServiceDetailModal
+              service={service}
+              phone={phone}
+              areas={areas}
+              testimonial={testimonial}
+            >
+              <Button variant="outline" className="w-full gap-2 cursor-pointer" size="sm">
+                Learn More <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </ServiceDetailModal>
+          </div>
+        </div>
       </div>
     );
   }

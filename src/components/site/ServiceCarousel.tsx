@@ -61,7 +61,7 @@ export function ServiceCarousel({
               key={s._id}
               className="min-w-0 flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_25%] pl-4 pb-1 flex flex-col"
             >
-              <ServiceCard service={s} phone={phone} areas={areas} testimonial={testimonial} variant={variant} />
+              <ServiceCard service={s} phone={phone} areas={areas} testimonial={testimonial} variant={variant || 'simple'} />
             </div>
           ))}
         </div>
