@@ -19,6 +19,7 @@ export interface NewLawnGalleryItem {
   category: string;
   isBeforeAfter: boolean;
   isActive: boolean;
+  reviewIds?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -29,6 +30,7 @@ export interface NewLawnReview {
   location: string;
   rating: number;
   comment: string;
+  images?: string[];
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -79,6 +81,13 @@ export interface WebsiteConfig {
   footerElement: any[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ContactInquiryPayload {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
 }
 
 export type NewLawnListResponse<T> = {

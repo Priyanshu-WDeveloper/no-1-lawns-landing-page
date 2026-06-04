@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { PageHero } from '@/components/site/PageHero';
 import { CTABanner } from '@/components/site/CTABanner';
+import { ServiceCard } from '@/components/site/ServiceCard';
 import { getServices, getWebsiteConfig } from '@/lib/server-data';
 
 export const metadata: Metadata = {
@@ -12,6 +9,94 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = 'force-dynamic';
+
+const serviceBadges: Record<string, string> = {
+  'Lawn Mowing': 'Most Popular',
+  'Garden Clean-Ups': 'Seasonal Service',
+  'Stump Grinding': 'Specialist',
+  'Artificial Lawns': 'Premium Service',
+  'Garden Landscaping': 'Popular Pick',
+  'Small Tree Removal / Pruning': 'Specialist',
+  'Hedge Trimming': 'Seasonal Service',
+};
+
+const serviceReviewCounts: Record<string, number> = {
+  'Lawn Mowing': 120,
+  'Garden Clean-Ups': 74,
+  'Stump Grinding': 23,
+  'Artificial Lawns': 41,
+  'Garden Landscaping': 68,
+  'Small Tree Removal / Pruning': 31,
+  'Weed Control': 56,
+  'Hedge Trimming': 47,
+};
+
+const serviceBullets: Record<string, string[]> = {
+  'Lawn Mowing': [
+    'Professional zero-turn mowing for a perfect finish',
+    'Edging, trimming and complete cleanup',
+  ],
+  'Garden Clean-Ups': [
+    'Leaf and debris removal from all garden areas',
+    'Green waste disposal and composting',
+  ],
+  'Stump Grinding': [
+    'Complete stump removal below ground level',
+    'Root grinding to prevent regrowth',
+  ],
+  'Artificial Lawns': [
+    'Professional synthetic turf installation',
+    'Base preparation and drainage planning',
+  ],
+  'Garden Landscaping': [
+    'Full landscape design and consultation',
+    'Plant selection suited to your climate',
+  ],
+  'Small Tree Removal / Pruning': [
+    'Safe tree removal in tight access areas',
+    'Crown reduction and thinning for health',
+  ],
+  'Weed Control': [
+    'Targeted spraying for broadleaf and grass weeds',
+    'Manual weeding in garden beds and borders',
+  ],
+  'Hedge Trimming': [
+    'Formal hedge shaping and levelling',
+    'Overgrown hedge reduction and recovery',
+  ],
+};
+
+const defaultBullets = [
+  'Professional service tailored to your needs',
+  'Quality workmanship guaranteed',
+];
+
+function getBadge(title: string): string | undefined {
+  const key = Object.keys(serviceBadges).find(
+    (k) =>
+      title.toLowerCase().includes(k.toLowerCase()) ||
+      k.toLowerCase().includes(title.toLowerCase()),
+  );
+  return key ? serviceBadges[key] : undefined;
+}
+
+function getReviewCount(title: string): number | undefined {
+  const key = Object.keys(serviceReviewCounts).find(
+    (k) =>
+      title.toLowerCase().includes(k.toLowerCase()) ||
+      k.toLowerCase().includes(title.toLowerCase()),
+  );
+  return key ? serviceReviewCounts[key] : undefined;
+}
+
+function getBullets(title: string): string[] {
+  const key = Object.keys(serviceBullets).find(
+    (k) =>
+      title.toLowerCase().includes(k.toLowerCase()) ||
+      k.toLowerCase().includes(title.toLowerCase()),
+  );
+  return key ? serviceBullets[key] : defaultBullets;
+}
 
 export default async function ServicesPage() {
   const [services, config] = await Promise.all([
@@ -31,55 +116,23 @@ export default async function ServicesPage() {
         image="/images/hero.png"
       />
       <section className="container mx-auto px-4 py-12">
-        <div className="grid gap-4">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
-            <div
+            <ServiceCard
               key={s._id}
-              className="rounded-2xl border bg-white p-4 sm:p-5 shadow-sm"
-            >
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-                <img
-                  src={s.image || '/images/hero-lawn.jpg'}
-                  alt={s.title}
-                  loading="lazy"
-                  className="h-48 w-full rounded-xl object-cover sm:h-20 sm:w-28 sm:shrink-0"
-                />
-
-                <div className="flex flex-1 flex-col gap-4 min-w-0">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0">
-                      <h3 className="text-lg sm:text-base font-bold text-primary-dark">
-                        {s.title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                        {s.description}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-3 shrink-0">
-                      <a
-                        href="tel:0223234429"
-                        className="flex h-10 w-10 mt-7 items-center justify-center rounded-full bg-primary/10 text-primary transition hover:bg-primary/20"
-                      >
-                        <Phone className="h-4 w-4" />
-                      </a>
-
-                      <div className="flex flex-col items-end gap-2">
-                        <p className="text-lg font-semibold text-primary">
-                          {s.price != null ? `From $${s.price}` : '$1-44'}
-                        </p>
-                        <Button
-                          asChild
-                          className="h-9 bg-primary px-5 text-sm text-white hover:bg-primary/90"
-                        >
-                          <Link href="/quote">Book Now</Link>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              service={{
+                title: s.title,
+                description: s.description,
+                image: s.image,
+                price: s.price ?? 44,
+              }}
+              phone={config?.websiteContactDetails?.phone}
+              areas={config?.websiteContactDetails}
+              rating={4.9}
+              reviewCount={getReviewCount(s.title)}
+              badge={getBadge(s.title)}
+              bullets={getBullets(s.title)}
+            />
           ))}
         </div>
       </section>

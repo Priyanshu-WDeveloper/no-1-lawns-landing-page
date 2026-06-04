@@ -1,12 +1,9 @@
-import type { Metadata } from 'next';
-import {
-  Phone,
-  Mail,
-  Clock,
-  MapPin,
-  Globe,
-  Leaf,
-} from 'lucide-react';
+'use client';
+
+import * as React from 'react';
+import { Phone, Mail, Clock, MapPin, Globe, Leaf } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,11 +11,17 @@ import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 import contactMap from '@public/images/contact-map.png';
 import { PageHero } from '@/components/site/PageHero';
-import { getWebsiteConfig } from '@/lib/server-data';
+import { useSubmitContactMutation } from '@/lib/redux/api';
+import type { WebsiteContactDetails } from '@/types/new-lawns.types';
 
-export const metadata: Metadata = {
-  title: 'Contact — No.1 Lawns',
-};
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.no1lawns.com/api/v1/websites';
+
+interface ContactFormData {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+}
 
 function FacebookIcon() {
   return (
@@ -36,26 +39,42 @@ function InstagramIcon() {
   );
 }
 
-export const dynamic = 'force-dynamic';
+export default function ContactPage() {
+  const [contact, setContact] = React.useState<WebsiteContactDetails | null>(null);
+  const [banner, setBanner] = React.useState<{ title: string; description: string } | null>(null);
+  const [submitContact, { isLoading }] = useSubmitContactMutation();
 
-export default async function ContactPage() {
-  let contact;
-  let banner;
-  try {
-    const config = await getWebsiteConfig();
-    contact = config.websiteContactDetails;
-    banner = config.websiteBannerList?.[7];
-  } catch {
-    contact = null;
-    banner = null;
-  }
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormData>();
+
+  React.useEffect(() => {
+    fetch(`${API_URL}/config`)
+      .then((res) => res.json() as Promise<{ config: { websiteContactDetails: WebsiteContactDetails; websiteBannerList: Array<{ title: string; description: string }> } }>)
+      .then((data) => {
+        setContact(data.config.websiteContactDetails);
+        setBanner(data.config.websiteBannerList?.[7] || null);
+      })
+      .catch(() => {});
+  }, []);
+
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      await submitContact(data).unwrap();
+      toast.success('Message sent successfully! We\'ll get back to you soon.');
+      reset();
+    } catch {
+      toast.error('Failed to send message. Please try again later.');
+    }
+  };
 
   const phone = contact?.phone || '';
   const email = contact?.email || '';
   const businessHours = contact?.businessHours || '';
-  const areas = [contact?.city, contact?.country]
-    .filter(Boolean)
-    .join(', ');
+  const areas = [contact?.city, contact?.country].filter(Boolean).join(', ');
 
   const contactCards = [
     { icon: Phone, title: 'Call Us', value: phone },
@@ -68,9 +87,7 @@ export default async function ContactPage() {
     <>
       <PageHero
         title={banner?.title || 'Contact Us'}
-        subtitle={
-          banner?.description || "We'd love to hear from you!"
-        }
+        subtitle={banner?.description || "We'd love to hear from you!"}
         image="/images/garden-plants.jpg"
       />
       <section className="container mx-auto px-4 py-14 grid lg:grid-cols-2 gap-12">
@@ -95,29 +112,69 @@ export default async function ContactPage() {
         </div>
 
         <div className="bg-white border rounded-xl p-10 shadow-sm">
-          <form className="grid md:grid-cols-2 gap-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-5">
             <div>
-              <Label>Your Name</Label>
-              <Input placeholder="Your name" className="mt-1" />
+              <Label htmlFor="name">Your Name</Label>
+              <Input
+                id="name"
+                placeholder="Your name"
+                className="mt-1"
+                {...register('name', { required: 'Name is required' })}
+              />
+              {errors.name && (
+                <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
+              )}
             </div>
             <div>
-              <Label>Phone Number</Label>
-              <Input placeholder="022 123 4567" className="mt-1" />
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                placeholder="022 123 4567"
+                className="mt-1"
+                {...register('phone', { required: 'Phone is required' })}
+              />
+              {errors.phone && (
+                <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
+              )}
             </div>
             <div className="md:col-span-2">
-              <Label>Email Address</Label>
-              <Input placeholder="you@example.com" className="mt-1" />
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                className="mt-1"
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Invalid email address',
+                  },
+                })}
+              />
+              {errors.email && (
+                <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+              )}
             </div>
             <div className="md:col-span-2">
-              <Label>Message</Label>
+              <Label htmlFor="message">Message</Label>
               <Textarea
+                id="message"
                 placeholder="How can we help you?"
                 className="mt-1 min-h-[140px]"
+                {...register('message', { required: 'Message is required' })}
               />
+              {errors.message && (
+                <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>
+              )}
             </div>
             <div className="md:col-span-2">
-              <Button className="bg-primary hover:bg-primary/90 text-white w-full">
-                Send Message
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="bg-primary hover:bg-primary/90 text-white w-full"
+              >
+                {isLoading ? 'Sending...' : 'Send Message'}
               </Button>
             </div>
           </form>

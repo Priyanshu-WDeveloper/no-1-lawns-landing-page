@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import { Toaster } from 'sonner';
 import '@/styles/globals.css';
 import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
@@ -46,6 +47,7 @@ export default async function RootLayout({
           <ReduxProvider>{children}</ReduxProvider>
         </main>
         <Footer contactDetails={contactDetails} />
+        <Toaster richColors closeButton position="top-right" />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

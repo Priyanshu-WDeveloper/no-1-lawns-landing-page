@@ -4,12 +4,22 @@ import { useState } from 'react';
 import { PageHero } from '@/components/site/PageHero';
 import { CTABanner } from '@/components/site/CTABanner';
 import { BeforeAfterSlider } from '@/components/gallery/BeforeAfterSlider';
+import { GalleryLightbox } from '@/components/gallery/GalleryLightbox';
 import { cn } from '@/lib/utils';
-import { useGetGalleryItemsQuery } from '@/lib/redux/api';
+import { useGetGalleryItemsQuery, useGetReviewsQuery } from '@/lib/redux/api';
+import type { NewLawnGalleryItem } from '@/types/new-lawns.types';
+import { enrichWithReviewId } from '@/lib/review-mapping';
 
 export default function GalleryPage() {
   const { data: items = [], isLoading } = useGetGalleryItemsQuery();
+  const { data: reviews = [] } = useGetReviewsQuery();
   const [active, setActive] = useState('All');
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const openLightbox = (item: NewLawnGalleryItem) => {
+    const idx = filteredItems.findIndex((i) => i._id === item._id);
+    if (idx !== -1) setLightboxIndex(idx);
+  };
 
   const categories = ['All', ...new Set(items.map((i) => i.category))];
 
@@ -19,6 +29,8 @@ export default function GalleryPage() {
   const beforeAfterItems = items.filter((i) => i.isBeforeAfter);
 
   const masonryItems = filteredItems.filter((i) => !i.isBeforeAfter);
+
+  const enrichedLightboxItems = filteredItems.map(enrichWithReviewId);
 
   const heights = ['h-52', 'h-64', 'h-56', 'h-72', 'h-48', 'h-60', 'h-68'];
 
@@ -75,12 +87,17 @@ export default function GalleryPage() {
             </h3>
             <div className="grid md:grid-cols-2 gap-6 mb-16">
               {beforeAfterItems.map((item) => (
-                <BeforeAfterSlider
+                <div
                   key={item._id}
-                  before={item.beforeImage || item.image}
-                  after={item.afterImage || item.image}
-                  alt={`${item.category} transformation before and after`}
-                />
+                  onClick={() => openLightbox(item)}
+                  className="cursor-pointer"
+                >
+                  <BeforeAfterSlider
+                    before={item.beforeImage || item.image}
+                    after={item.afterImage || item.image}
+                    alt={`${item.category} transformation before and after`}
+                  />
+                </div>
               ))}
             </div>
           </>
@@ -95,7 +112,8 @@ export default function GalleryPage() {
               {masonryItems.map((item, i) => (
                 <div
                   key={item._id}
-                  className={`relative ${heights[i % heights.length]} rounded-xl overflow-hidden mb-4 group`}
+                  onClick={() => openLightbox(item)}
+                  className={`relative ${heights[i % heights.length]} rounded-xl overflow-hidden mb-4 group cursor-pointer`}
                 >
                   <img
                     src={item.image}
@@ -111,6 +129,18 @@ export default function GalleryPage() {
         )}
       </section>
       <CTABanner />
+
+      {lightboxIndex !== null && (
+        <GalleryLightbox
+          items={enrichedLightboxItems}
+          reviews={reviews}
+          initialIndex={lightboxIndex}
+          open={true}
+          onOpenChange={(open) => {
+            if (!open) setLightboxIndex(null);
+          }}
+        />
+      )}
     </>
   );
 }
