@@ -24,27 +24,35 @@ export default async function AboutPage() {
 
   const banner = config?.websiteBannerList?.[2];
   const heroTitle = banner?.title || 'About Us';
-  const heroSubtitle = banner?.description || 'Local, reliable and passionate about beautiful gardens.';
+  const heroSubtitle =
+    banner?.description ||
+    'Local, reliable and passionate about beautiful gardens.';
+  const heroImg = banner?.image;
 
   const features = config?.websiteAboutUs?.features;
   const stats = config?.websiteAboutUs?.stats;
   const provinces = config?.websiteContactDetails?.provinces;
   const aboutImage = config?.websiteAboutUs?.image;
 
-  const displayValues = features && features.length > 0
-    ? features.map((f, i) => ({
-        icon: valueIcons[i % valueIcons.length],
-        title: f.title,
-        sub: f.description,
-      }))
-    : [];
+  const displayValues =
+    features && features.length > 0
+      ? features.map((f, i) => ({
+          icon: valueIcons[i % valueIcons.length],
+          title: f.title,
+          sub: f.description,
+        }))
+      : [];
 
-  const displayStats = stats && stats.length > 0
-    ? stats.map((s) => ({ v: s.value, l: s.label }))
-    : [];
+  const displayStats =
+    stats && stats.length > 0
+      ? stats.map((s) => ({ v: s.value, l: s.label }))
+      : [];
 
   const displayAreas = provinces
-    ? provinces.split(',').map((s: string) => s.trim()).filter(Boolean)
+    ? provinces
+        .split(',')
+        .map((s: string) => s.trim())
+        .filter(Boolean)
     : [];
 
   return (
@@ -52,7 +60,7 @@ export default async function AboutPage() {
       <PageHero
         title={heroTitle}
         subtitle={heroSubtitle}
-        image="/images/garden-plants.jpg"
+        image={heroImg || '/images/garden-plants.jpg'}
       />
       <section className="container mx-auto px-4 py-14 grid md:grid-cols-2 gap-10 items-start">
         <div>
@@ -69,19 +77,19 @@ export default async function AboutPage() {
           <div className="mt-8 space-y-5">
             {displayValues.map((v, i) => (
               <AnimateOnScroll key={v.title} delay={i * 100}>
-              <div className="flex gap-4">
-                <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                  <v.icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="font-semibold text-primary-dark">
-                    {v.title}
+                <div className="flex gap-4">
+                  <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <v.icon className="h-5 w-5" />
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {v.sub}
+                  <div>
+                    <div className="font-semibold text-primary-dark">
+                      {v.title}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {v.sub}
+                    </div>
                   </div>
                 </div>
-              </div>
               </AnimateOnScroll>
             ))}
           </div>
@@ -110,14 +118,14 @@ export default async function AboutPage() {
         <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6">
           {displayStats.map((s, i) => (
             <AnimateOnScroll key={s.l} delay={i * 100}>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary tabular-nums">
-                {s.v}
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-primary tabular-nums">
+                  {s.v}
+                </div>
+                <div className="text-sm text-muted-foreground mt-1">
+                  {s.l}
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground mt-1">
-                {s.l}
-              </div>
-            </div>
             </AnimateOnScroll>
           ))}
         </div>

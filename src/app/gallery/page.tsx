@@ -1,30 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PageHero } from '@/components/site/PageHero';
 import { CTABanner } from '@/components/site/CTABanner';
 import { BeforeAfterSlider } from '@/components/gallery/BeforeAfterSlider';
 import { GalleryLightbox } from '@/components/gallery/GalleryLightbox';
 import { cn } from '@/lib/utils';
-import { useGetGalleryItemsQuery, useGetReviewsQuery } from '@/lib/redux/api';
+import {
+  useGetGalleryItemsQuery,
+  useGetReviewsQuery,
+} from '@/lib/redux/api';
 import type { NewLawnGalleryItem } from '@/types/new-lawns.types';
 import { enrichWithReviewId } from '@/lib/review-mapping';
+import { getWebsiteConfig } from '@/lib/server-data';
 
 export default function GalleryPage() {
   const { data: items = [], isLoading } = useGetGalleryItemsQuery();
   const { data: reviews = [] } = useGetReviewsQuery();
   const [active, setActive] = useState('All');
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(
+    null,
+  );
+  const [config, setConfig] = useState<any>(null);
+
+  useEffect(() => {
+    getWebsiteConfig()
+      .then(setConfig)
+      .catch(() => setConfig(null));
+  }, []);
 
   const openLightbox = (item: NewLawnGalleryItem) => {
     const idx = filteredItems.findIndex((i) => i._id === item._id);
     if (idx !== -1) setLightboxIndex(idx);
   };
 
-  const categories = ['All', ...new Set(items.map((i) => i.category))];
+  const banner = config?.websiteBannerList?.[3];
+  const heroTitle = banner?.title || 'Our Gallery';
+  const heroSubtitle =
+    banner?.description || 'See the difference we can make.';
+  const heroImg = banner?.image || '/images/garden-foliage.jpg';
+
+  const categories = [
+    'All',
+    ...new Set(items.map((i) => i.category)),
+  ];
 
   const filteredItems =
-    active === 'All' ? items : items.filter((i) => i.category === active);
+    active === 'All'
+      ? items
+      : items.filter((i) => i.category === active);
 
   const beforeAfterItems = items.filter((i) => i.isBeforeAfter);
 
@@ -32,14 +56,22 @@ export default function GalleryPage() {
 
   const enrichedLightboxItems = filteredItems.map(enrichWithReviewId);
 
-  const heights = ['h-52', 'h-64', 'h-56', 'h-72', 'h-48', 'h-60', 'h-68'];
+  const heights = [
+    'h-52',
+    'h-64',
+    'h-56',
+    'h-72',
+    'h-48',
+    'h-60',
+    'h-68',
+  ];
 
   return (
     <>
       <PageHero
-        title="Our Gallery"
-        subtitle="See the difference we can make."
-        image="/images/garden-foliage.jpg"
+        title={heroTitle}
+        subtitle={heroSubtitle}
+        image={heroImg}
       />
       <section className="container mx-auto px-4 py-12">
         <div className="flex flex-wrap gap-2 justify-center mb-10">

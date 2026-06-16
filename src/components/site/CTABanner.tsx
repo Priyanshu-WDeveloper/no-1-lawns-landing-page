@@ -32,7 +32,9 @@ export function CTABanner({ phone }: { phone?: string }) {
                     <Phone className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <div className="text-xs text-white/70">Call Us Now</div>
+                    <div className="text-xs text-white/70">
+                      Call Us Now
+                    </div>
                     <div className="font-bold text-lg">{phone}</div>
                   </div>
                 </div>
@@ -40,7 +42,7 @@ export function CTABanner({ phone }: { phone?: string }) {
             )}
             <a href="/quote">
               <Button className="bg-white text-primary hover:bg-white/90">
-                Get a Free Quote
+                Send Quote
               </Button>
             </a>
           </div>

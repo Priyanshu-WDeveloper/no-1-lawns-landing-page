@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { NewLawnGalleryItem, NewLawnReview, ContactInquiryPayload } from '@/types/new-lawns.types';
+import type { NewLawnGalleryItem, NewLawnReview, ContactInquiryPayload, QuoteRequestPayload } from '@/types/new-lawns.types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.no1lawns.com/api/v1/websites';
 
@@ -21,7 +21,10 @@ export const api = createApi({
     submitContact: builder.mutation<{ message: string }, ContactInquiryPayload>({
       query: (body) => ({ url: '/contact-us', method: 'POST', body }),
     }),
+    submitQuote: builder.mutation<{ message: string }, QuoteRequestPayload | FormData>({
+      query: (body) => ({ url: '/quotes', method: 'POST', body }),
+    }),
   }),
 });
 
-export const { useGetGalleryItemsQuery, useGetReviewsQuery, useSubmitContactMutation } = api;
+export const { useGetGalleryItemsQuery, useGetReviewsQuery, useSubmitContactMutation, useSubmitQuoteMutation } = api;

@@ -2,7 +2,11 @@ import type { Metadata } from 'next';
 import { PageHero } from '@/components/site/PageHero';
 import { CTABanner } from '@/components/site/CTABanner';
 import { ServiceCard } from '@/components/site/ServiceCard';
-import { getServices, getWebsiteConfig } from '@/lib/server-data';
+import {
+  getServices,
+  getWebsiteConfig,
+  getReviews,
+} from '@/lib/server-data';
 
 export const metadata: Metadata = {
   title: 'Our Services — No.1 Lawns',
@@ -99,21 +103,24 @@ function getBullets(title: string): string[] {
 }
 
 export default async function ServicesPage() {
-  const [services, config] = await Promise.all([
+  const [services, config, reviews] = await Promise.all([
     getServices(),
     getWebsiteConfig().catch(() => null),
+    getReviews().catch(() => []),
   ]);
 
   const banner = config?.websiteBannerList?.[1];
   const heroTitle = banner?.title || 'Our Services';
-  const heroSubtitle = banner?.description || 'Professional garden maintenance services tailored to your needs.';
-
+  const heroSubtitle =
+    banner?.description ||
+    'Professional garden maintenance services tailored to your needs.';
+  const heroImg = banner?.image || '/images/hero-lawn.jpg';
   return (
     <>
       <PageHero
         title={heroTitle}
         subtitle={heroSubtitle}
-        image="/images/hero.png"
+        image={heroImg}
       />
       <section className="container mx-auto px-4 py-12">
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -132,6 +139,7 @@ export default async function ServicesPage() {
               reviewCount={getReviewCount(s.title)}
               badge={getBadge(s.title)}
               bullets={getBullets(s.title)}
+              testimonial={reviews[0]}
             />
           ))}
         </div>

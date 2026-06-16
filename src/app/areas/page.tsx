@@ -16,15 +16,24 @@ export const dynamic = 'force-dynamic';
 export default async function AreasPage() {
   let areas: { city: string; title: string; desc: string }[] = [];
   let config;
+  let banner;
   try {
     config = await getWebsiteConfig();
     const provinces = config?.websiteContactDetails?.provinces;
+    banner = config?.websiteBannerList?.[5];
     areas = provinces
-      ? provinces.split(',').map((s: string) => s.trim()).filter(Boolean).map((city: string) => ({
-          city,
-          title: 'Garden Services in ' + city,
-          desc: 'Professional garden maintenance services for ' + city + ' and surrounding areas.',
-        }))
+      ? provinces
+          .split(',')
+          .map((s: string) => s.trim())
+          .filter(Boolean)
+          .map((city: string) => ({
+            city,
+            title: 'Garden Services in ' + city,
+            desc:
+              'Professional garden maintenance services for ' +
+              city +
+              ' and surrounding areas.',
+          }))
       : [];
   } catch {}
 
@@ -34,37 +43,41 @@ export default async function AreasPage() {
         <div>
           <div className="mb-4">
             <h1 className="text-4xl font-bold text-primary-dark">
-              Areas We Serve
+              {`${banner?.title || 'Areas We Serve'}`}
             </h1>
             <p className="text-lg text-muted-foreground mt-3 leading-relaxed max-w-lg">
-              Providing professional garden maintenance services
-              across New Zealand.
+              {`${banner?.description || ' Providing professional garden maintenance services across New Zealand.'}`}
             </p>
           </div>
           <div className="space-y-4">
-            {areas.map((a: { city: string; title: string; desc: string }, i) => (
-              <AnimateOnScroll key={a.city} delay={i * 100}>
-              <a
-                href="#"
-                className="flex items-center justify-between bg-white border rounded-xl p-6 hover:shadow-lg transition-[box-shadow] duration-200 group"
-              >
-                <div>
-                  <div className="font-bold text-primary-dark text-lg">
-                    {a.title}
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                    {a.desc}
-                  </div>
-                </div>
-                <ArrowRight className="h-5 w-5 text-primary shrink-0 ml-4 transition-transform duration-200 group-hover:translate-x-1" />
-              </a>
-              </AnimateOnScroll>
-            ))}
+            {areas.map(
+              (
+                a: { city: string; title: string; desc: string },
+                i,
+              ) => (
+                <AnimateOnScroll key={a.city} delay={i * 100}>
+                  <a
+                    href="#"
+                    className="flex items-center justify-between bg-white border rounded-xl p-6 hover:shadow-lg transition-[box-shadow] duration-200 group"
+                  >
+                    <div>
+                      <div className="font-bold text-primary-dark text-lg">
+                        {a.title}
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                        {a.desc}
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-primary shrink-0 ml-4 transition-transform duration-200 group-hover:translate-x-1" />
+                  </a>
+                </AnimateOnScroll>
+              ),
+            )}
           </div>
         </div>
         <div className="rounded-2xl overflow-hidden h-[850px] relative top-0 lg:sticky lg:top-24">
           <Image
-            src={serviceAreaImg}
+            src={banner?.image || serviceAreaImg}
             fill
             className="object-contain"
             alt="Beautiful maintained garden"

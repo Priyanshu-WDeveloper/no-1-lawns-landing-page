@@ -155,9 +155,16 @@ export function ServiceDetailModal({
         <div className="flex-1 overflow-y-auto">
           <div className="px-6 pt-4 space-y-4">
             <div>
-              <h2 className="text-2xl font-bold text-primary-dark">
-                {icon} {service.title}
-              </h2>
+              <div className="flex items-start justify-between gap-4">
+                <h2 className="text-2xl font-bold text-primary-dark">
+                  {icon} {service.title}
+                </h2>
+                {service.price && (
+                  <span className="text-xl font-bold text-primary shrink-0">
+                    From ${service.price}
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-1 mt-1 text-sm">
                 <span className="text-amber-500">⭐⭐⭐⭐⭐</span>
                 <span className="text-muted-foreground ml-1">
@@ -223,19 +230,6 @@ export function ServiceDetailModal({
                 </div>
               </div>
             )}
-
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              {service.price && (
-                <div>
-                  <span className="text-xl font-bold text-primary">
-                    From ${service.price}
-                  </span>
-                  <span className="text-xs text-muted-foreground ml-1">
-                    per visit
-                  </span>
-                </div>
-              )}
-            </div>
           </div>
 
           <div className="sticky bottom-0 bg-white border-t p-4">
@@ -246,7 +240,7 @@ export function ServiceDetailModal({
                 onClick={() => setOpen(false)}
               >
                 <Button className="w-full gap-2" size="lg">
-                  Get Free Quote
+                  Send Quote
                 </Button>
               </Link>
               {phone && (

@@ -1,7 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import { Phone, Mail, Clock, MapPin, Globe, Leaf } from 'lucide-react';
+import {
+  Phone,
+  Mail,
+  Clock,
+  MapPin,
+  Globe,
+  Leaf,
+} from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -12,9 +19,11 @@ import Image from 'next/image';
 import contactMap from '@public/images/contact-map.png';
 import { PageHero } from '@/components/site/PageHero';
 import { useSubmitContactMutation } from '@/lib/redux/api';
-import type { WebsiteContactDetails } from '@/types/new-lawns.types';
+import type { WebsiteContactDetails, WebsiteConfigBanner } from '@/types/new-lawns.types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.no1lawns.com/api/v1/websites';
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://api.no1lawns.com/api/v1/websites';
 
 interface ContactFormData {
   name: string;
@@ -40,8 +49,9 @@ function InstagramIcon() {
 }
 
 export default function ContactPage() {
-  const [contact, setContact] = React.useState<WebsiteContactDetails | null>(null);
-  const [banner, setBanner] = React.useState<{ title: string; description: string } | null>(null);
+  const [contact, setContact] =
+    React.useState<WebsiteContactDetails | null>(null);
+  const [banner, setBanner] = React.useState<WebsiteConfigBanner | null>(null);
   const [submitContact, { isLoading }] = useSubmitContactMutation();
 
   const {
@@ -53,7 +63,15 @@ export default function ContactPage() {
 
   React.useEffect(() => {
     fetch(`${API_URL}/config`)
-      .then((res) => res.json() as Promise<{ config: { websiteContactDetails: WebsiteContactDetails; websiteBannerList: Array<{ title: string; description: string }> } }>)
+      .then(
+        (res) =>
+          res.json() as Promise<{
+            config: {
+              websiteContactDetails: WebsiteContactDetails;
+              websiteBannerList: WebsiteConfigBanner[];
+            };
+          }>,
+      )
       .then((data) => {
         setContact(data.config.websiteContactDetails);
         setBanner(data.config.websiteBannerList?.[7] || null);
@@ -64,7 +82,9 @@ export default function ContactPage() {
   const onSubmit = async (data: ContactFormData) => {
     try {
       await submitContact(data).unwrap();
-      toast.success('Message sent successfully! We\'ll get back to you soon.');
+      toast.success(
+        "Message sent successfully! We'll get back to you soon.",
+      );
       reset();
     } catch {
       toast.error('Failed to send message. Please try again later.');
@@ -74,7 +94,9 @@ export default function ContactPage() {
   const phone = contact?.phone || '';
   const email = contact?.email || '';
   const businessHours = contact?.businessHours || '';
-  const areas = [contact?.city, contact?.country].filter(Boolean).join(', ');
+  const areas = [contact?.city, contact?.country]
+    .filter(Boolean)
+    .join(', ');
 
   const contactCards = [
     { icon: Phone, title: 'Call Us', value: phone },
@@ -87,8 +109,10 @@ export default function ContactPage() {
     <>
       <PageHero
         title={banner?.title || 'Contact Us'}
-        subtitle={banner?.description || "We'd love to hear from you!"}
-        image="/images/garden-plants.jpg"
+        subtitle={
+          banner?.description || "We'd love to hear from you!"
+        }
+        image={banner?.image || '/images/garden-plants.jpg'}
       />
       <section className="container mx-auto px-4 py-14 grid lg:grid-cols-2 gap-12">
         <div>
@@ -112,17 +136,24 @@ export default function ContactPage() {
         </div>
 
         <div className="bg-white border rounded-xl p-10 shadow-sm">
-          <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-5">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="grid md:grid-cols-2 gap-5"
+          >
             <div>
               <Label htmlFor="name">Your Name</Label>
               <Input
                 id="name"
                 placeholder="Your name"
                 className="mt-1"
-                {...register('name', { required: 'Name is required' })}
+                {...register('name', {
+                  required: 'Name is required',
+                })}
               />
               {errors.name && (
-                <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.name.message}
+                </p>
               )}
             </div>
             <div>
@@ -131,10 +162,14 @@ export default function ContactPage() {
                 id="phone"
                 placeholder="022 123 4567"
                 className="mt-1"
-                {...register('phone', { required: 'Phone is required' })}
+                {...register('phone', {
+                  required: 'Phone is required',
+                })}
               />
               {errors.phone && (
-                <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.phone.message}
+                </p>
               )}
             </div>
             <div className="md:col-span-2">
@@ -153,7 +188,9 @@ export default function ContactPage() {
                 })}
               />
               {errors.email && (
-                <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.email.message}
+                </p>
               )}
             </div>
             <div className="md:col-span-2">
@@ -162,10 +199,14 @@ export default function ContactPage() {
                 id="message"
                 placeholder="How can we help you?"
                 className="mt-1 min-h-[140px]"
-                {...register('message', { required: 'Message is required' })}
+                {...register('message', {
+                  required: 'Message is required',
+                })}
               />
               {errors.message && (
-                <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.message.message}
+                </p>
               )}
             </div>
             <div className="md:col-span-2">

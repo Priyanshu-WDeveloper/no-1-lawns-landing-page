@@ -1,12 +1,16 @@
+// import heroImg from '@public/images/hero.png';
 import Image from 'next/image';
-import heroImg from '@public/images/hero.png';
 import { Phone, Leaf, ShieldCheck, User, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ServiceCarousel } from '@/components/site/ServiceCarousel';
 import { SectionHeading } from '@/components/site/SectionHeading';
 import { CTABanner } from '@/components/site/CTABanner';
 import { AnimateOnScroll } from '@/components/site/AnimateOnScroll';
-import { getServices, getWebsiteConfig, getReviews } from '@/lib/server-data';
+import {
+  getServices,
+  getWebsiteConfig,
+  getReviews,
+} from '@/lib/server-data';
 
 const featureIcons = [Leaf, ShieldCheck, User, MapPin];
 
@@ -30,9 +34,13 @@ export default async function Home() {
   }
 
   const banner = config?.websiteBannerList?.[0];
-  const heroTitle = banner?.title || 'Beautiful Gardens,<br />Well Maintained,<br />All Year Round.';
-  const heroDesc = banner?.description || 'Professional garden maintenance services to keep your outdoor spaces healthy, clean and beautiful.';
-
+  const heroTitle =
+    banner?.title ||
+    'Beautiful Gardens,<br />Well Maintained,<br />All Year Round.';
+  const heroDesc =
+    banner?.description ||
+    'Professional garden maintenance services to keep your outdoor spaces healthy, clean and beautiful.';
+  const heroImg = banner?.image;
   const features = config?.websiteAboutUs?.features?.length
     ? config.websiteAboutUs.features.map((f, i) => ({
         icon: featureIcons[i % featureIcons.length],
@@ -46,7 +54,7 @@ export default async function Home() {
       <section className="relative">
         <section className="relative h-[85vh] overflow-hidden">
           <Image
-            src={heroImg}
+            src={heroImg || '/images/hero-lawn.jpg'}
             fill
             priority
             className="object-cover outline outline-1 -outline-offset-1 outline-black/10"
@@ -76,7 +84,7 @@ export default async function Home() {
                       size="lg"
                       className="bg-primary hover:bg-primary/90 text-white gap-2"
                     >
-                      Get a Free Quote
+                      Send Quote
                     </Button>
                   </a>
                   {config?.websiteContactDetails?.phone && (
@@ -85,7 +93,8 @@ export default async function Home() {
                       variant="outline"
                       className="bg-white/10 text-white border-white/30 hover:bg-white/20"
                     >
-                      <Phone className="h-4 w-4" /> {config.websiteContactDetails.phone}
+                      <Phone className="h-4 w-4" />{' '}
+                      {config.websiteContactDetails.phone}
                     </Button>
                   )}
                 </div>
@@ -103,7 +112,9 @@ export default async function Home() {
                     <div className="font-semibold text-sm">
                       {f.title}
                     </div>
-                    <div className="text-xs text-white/80">{f.sub}</div>
+                    <div className="text-xs text-white/80">
+                      {f.sub}
+                    </div>
                   </div>
                 </div>
               </AnimateOnScroll>
@@ -119,14 +130,14 @@ export default async function Home() {
           subtitle="One stop solution for all your garden care needs."
         />
         <ServiceCarousel
-  services={serviceList.slice(0, 8)}
-  phone={config?.websiteContactDetails?.phone}
-  areas={{
-    city: config?.websiteContactDetails?.city,
-    country: config?.websiteContactDetails?.country,
-  }}
-  testimonial={reviews[0]}
-/>
+          services={serviceList.slice(0, 8)}
+          phone={config?.websiteContactDetails?.phone}
+          areas={{
+            city: config?.websiteContactDetails?.city,
+            country: config?.websiteContactDetails?.country,
+          }}
+          testimonial={reviews[0]}
+        />
       </section>
 
       <CTABanner phone={config?.websiteContactDetails?.phone} />

@@ -83,6 +83,18 @@ export interface WebsiteConfig {
   updatedAt: string;
 }
 
+export interface QuoteRequestPayload {
+  name: string;
+  phone: string;
+  email: string;
+  serviceRequired: string;
+  propertyAddress: string;
+  propertySize: string;
+  preferredDate: string;
+  additionalDetails: string;
+  // documents: File[]; // File upload handling will be done separately
+}
+
 export interface ContactInquiryPayload {
   name: string;
   email: string;

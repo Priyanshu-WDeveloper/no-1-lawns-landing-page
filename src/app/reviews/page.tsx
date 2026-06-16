@@ -28,7 +28,7 @@ export default async function ReviewsPage() {
   const heroSubtitle =
     banner?.description ||
     'Proud to have happy customers across New Zealand.';
-
+  const heroImg = banner?.image;
   const statCards = config?.websiteAboutUs?.stats?.length
     ? config.websiteAboutUs.stats.slice(0, 3).map((s) => ({
         label: s.label,
@@ -45,7 +45,7 @@ export default async function ReviewsPage() {
       <PageHero
         title={heroTitle}
         subtitle={heroSubtitle}
-        image="/images/garden-plants.jpg"
+        image={heroImg || '/images/garden-plants.jpg'}
       />
       <section className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-6 mb-12">
